@@ -25,9 +25,7 @@ RUN  usermod -u 99 nobody && \
   add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates universe multiverse" && \
   apt-get update -q && \
   apt-get install -qy git-core python unrar wget python-dev python-pip libjpeg62 libjpeg62-dev libpng12-dev libfreetype6 libfreetype6-dev zlib1g-dev && \
-  wget -P /tmp/ https://github.com/styxit/HTPC-Manager/archive/0.11.0.tar.gz  && \
-  tar -C /opt/ -xvf /tmp/0.11.0.tar.gz  && \
-  mv /opt/HTPC-Manager-0.11.0 /opt/HTPC-Manager && \
+  
   chown nobody:users /opt/HTPC-Manager  && \
   pip install pillow && \
   pip install psutil && \
