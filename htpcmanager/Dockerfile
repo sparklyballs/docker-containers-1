@@ -1,5 +1,5 @@
 FROM phusion/baseimage:0.9.16
-MAINTAINER smdion <me@seandion.com>
+MAINTAINER sparklyballs
 
 # Set correct environment variables
 ENV HOME /root
@@ -11,10 +11,22 @@ ENV LANGUAGE en_US.UTF-8
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
+# Add local files
+ADD src/ root/
+
+# Add edge.sh to execute during container startup
+RUN mkdir -p /etc/my_init.d && \
+mv /root/edge.sh /etc/my_init.d/edge.sh && \
+chmod +x /etc/my_init.d/edge.sh && \
+
+# Add htpcmanager to runit
+mkdir /etc/service/htpcmanager && \
+mv /root/htpcmanager.sh /etc/service/htpcmanager/run && \
+chmod +x /etc/service/htpcmanager/run && \
 
 
 # Configure user nobody to match unRAID's settings
-RUN  usermod -u 99 nobody && \
+ usermod -u 99 nobody && \
  usermod -g 100 nobody && \
  usermod -d /home nobody && \
  chown -R nobody:users /home && \
@@ -34,19 +46,6 @@ RUN  usermod -u 99 nobody && \
 # clean up
 apt-get clean && \
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Add local files
-ADD src/ root/
-
-# Add edge.sh to execute during container startup
-RUN mkdir -p /etc/my_init.d && \
-mv /root/edge.sh /etc/my_init.d/edge.sh && \
-chmod +x /etc/my_init.d/edge.sh && \
-
-# Add htpcmanager to runit
-mkdir /etc/service/htpcmanager && \
-mv /root/htpcmanager.sh /etc/service/htpcmanager/run && \
-chmod +x /etc/service/htpcmanager/run
 
 #Expose Ports
 EXPOSE 8085
